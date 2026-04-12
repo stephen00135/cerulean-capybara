@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>Simple Form</title>
+</head>
+<body>
+    <h1>Simple Flask Form</h1>
+
+    <form method="post">
+        <label for="name">Your name:</label>
+        <input type="text" id="name" name="name">
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if name %}
+        <p>Hello, {{ name }}!</p>
+    {% endif %}
+</body>
+</html>
