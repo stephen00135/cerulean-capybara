@@ -6,7 +6,7 @@ from app.forms import LoginForm
 @app.route('/index')
 @app.route('/employee')
 def employee():
-    return render_template('index.html', title='Employee')
+    return render_template('employee.html', title='Employee')
 
 @app.route('/manager')
 def manager():
