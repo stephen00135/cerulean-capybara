@@ -1,2 +1,4 @@
 .venv/
 *session.sql
+__pycache__/
+*.pyc
