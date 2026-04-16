@@ -1,5 +1,62 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1>Transaction</h1>
+<form method="post">
+        {{ transaction_form.hidden_tag() }}
 
+        <div>
+            {{ transaction_form.transaction_type.label }}<br>
+            {{ transaction_form.transaction_type() }}
+            {% for error in transaction_form.transaction_type.errors %}
+                <div style="color: red;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ transaction_form.customer.label }}<br>
+            {{ transaction_form.customer(size=40) }}
+            {% for error in transaction_form.customer.errors %}
+                <div style="color: red;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ transaction_form.employee.label }}<br>
+            {{ transaction_form.employee(size=40) }}
+            {% for error in transaction_form.employee.errors %}
+                <div style="color: red;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ transaction_form.payment_method.label }}<br>
+            {{ transaction_form.payment_method() }}
+            {% for error in transaction_form.payment_method.errors %}
+                <div style="color: red;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <h2>Item</h2>
+
+        <div>
+            {{ item_form.product.product_id.label }}<br>
+            {{ item_form.product.product_id() }}
+            {% for error in item_form.product.product_id.errors %}
+                <div style="color: red;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ item_form.quantity.label }}<br>
+            {{ item_form.quantity() }}
+            {% for error in item_form.quantity.errors %}
+                <div style="color: red;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ transaction_form.submit() }}
+        </div>
+    </form>
 {% endblock %}
