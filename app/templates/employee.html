@@ -1,62 +1,188 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Transaction</h1>
-<form method="post">
-        {{ transaction_form.hidden_tag() }}
+<div class="container py-4">
+    <h1 class="mb-4">Transaction</h1>
 
-        <div>
-            {{ transaction_form.transaction_type.label }}<br>
-            {{ transaction_form.transaction_type() }}
-            {% for error in transaction_form.transaction_type.errors %}
-                <div style="color: red;">{{ error }}</div>
+    <form method="post" id="transaction-form">
+        {{ form.hidden_tag() }}
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Transaction Info
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        {{ form.transaction_type.label(class="form-label") }}
+                        {{ form.transaction_type(class="form-select") }}
+                        {% for error in form.transaction_type.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form.payment_method.label(class="form-label") }}
+                        {{ form.payment_method(class="form-select") }}
+                        {% for error in form.payment_method.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form.customer.label(class="form-label") }}
+                        {{ form.customer(class="form-control", placeholder="customer@example.com") }}
+                        {% for error in form.customer.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form.employee.label(class="form-label") }}
+                        {{ form.employee(class="form-control", placeholder="employee@example.com") }}
+                        {% for error in form.employee.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0">Items</h2>
+        </div>
+
+        <div id="items">
+            {% for item in form.items %}
+            <div class="card mb-3 item-row" data-index="{{ loop.index0 }}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="h5 mb-0">Item {{ loop.index }}</h3>
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-item">
+                            Remove
+                        </button>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            {{ item.product.product_id.label(class="form-label") }}
+                            {{ item.product.product_id(class="form-control") }}
+                            {% for error in item.product.product_id.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            {{ item.quantity.label(class="form-label") }}
+                            {{ item.quantity(class="form-control", min="1", max="50") }}
+                            {% for error in item.quantity.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
         </div>
 
-        <div>
-            {{ transaction_form.customer.label }}<br>
-            {{ transaction_form.customer(size=40) }}
-            {% for error in transaction_form.customer.errors %}
-                <div style="color: red;">{{ error }}</div>
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ transaction_form.employee.label }}<br>
-            {{ transaction_form.employee(size=40) }}
-            {% for error in transaction_form.employee.errors %}
-                <div style="color: red;">{{ error }}</div>
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ transaction_form.payment_method.label }}<br>
-            {{ transaction_form.payment_method() }}
-            {% for error in transaction_form.payment_method.errors %}
-                <div style="color: red;">{{ error }}</div>
-            {% endfor %}
-        </div>
-
-        <h2>Item</h2>
-
-        <div>
-            {{ item_form.product.product_id.label }}<br>
-            {{ item_form.product.product_id() }}
-            {% for error in item_form.product.product_id.errors %}
-                <div style="color: red;">{{ error }}</div>
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ item_form.quantity.label }}<br>
-            {{ item_form.quantity() }}
-            {% for error in item_form.quantity.errors %}
-                <div style="color: red;">{{ error }}</div>
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ transaction_form.submit() }}
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+            {{ form.submit(class="btn btn-primary") }}
+            <button type="button" class="btn btn-outline-primary" id="add-item">
+                Add Item
+            </button>
         </div>
     </form>
+</div>
+
+<template id="item-template">
+    <div class="card mb-3 item-row" data-index="__index__">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h5 mb-0">Item __number__</h3>
+                <button type="button" class="btn btn-outline-danger btn-sm remove-item">
+                    Remove
+                </button>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="items-__index__-product-product_id">Product ID</label>
+                    <input
+                        class="form-control"
+                        id="items-__index__-product-product_id"
+                        name="items-__index__-product-product_id"
+                        type="number"
+                    >
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="items-__index__-quantity">Quantity</label>
+                    <input
+                        class="form-control"
+                        id="items-__index__-quantity"
+                        name="items-__index__-quantity"
+                        type="number"
+                        min="1"
+                        max="50"
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    const itemsContainer = document.getElementById("items");
+    const addButton = document.getElementById("add-item");
+    const template = document.getElementById("item-template");
+
+    function nextIndex() {
+        return itemsContainer.querySelectorAll(".item-row").length;
+    }
+
+    function addItemRow() {
+        const index = nextIndex();
+        const html = template.innerHTML
+            .replaceAll("__index__", index)
+            .replaceAll("__number__", index + 1);
+
+        itemsContainer.insertAdjacentHTML("beforeend", html);
+    }
+
+    function renumberRows() {
+        const rows = itemsContainer.querySelectorAll(".item-row");
+
+        rows.forEach((row, i) => {
+            row.dataset.index = i;
+            row.querySelector("h3").textContent = `Item ${i + 1}`;
+
+            const productInput = row.querySelector('input[name*="product-product_id"]');
+            const quantityInput = row.querySelector('input[name*="quantity"]');
+            const productLabel = row.querySelector('label[for*="product-product_id"]');
+            const quantityLabel = row.querySelector('label[for*="quantity"]');
+
+            productInput.name = `items-${i}-product-product_id`;
+            productInput.id = `items-${i}-product-product_id`;
+            productLabel.setAttribute("for", productInput.id);
+
+            quantityInput.name = `items-${i}-quantity`;
+            quantityInput.id = `items-${i}-quantity`;
+            quantityLabel.setAttribute("for", quantityInput.id);
+        });
+    }
+
+    addButton.addEventListener("click", () => {
+        addItemRow();
+    });
+
+    itemsContainer.addEventListener("click", (event) => {
+        if (event.target.classList.contains("remove-item")) {
+            const rows = itemsContainer.querySelectorAll(".item-row");
+            if (rows.length > 1) {
+                event.target.closest(".item-row").remove();
+                renumberRows();
+            }
+        }
+    });
+</script>
 {% endblock %}

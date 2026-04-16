@@ -1,13 +1,24 @@
 from flask_wtf import FlaskForm
-from wtforms import (StringField, PasswordField, BooleanField,
+from wtforms import (StringField, PasswordField, BooleanField, FieldList,
                       SubmitField, SelectField, IntegerField, FormField)
 from wtforms.validators import DataRequired, Optional, Length, NumberRange
+from wtforms.form import Form
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+class ProductForm(Form):
+    product_id = IntegerField('Product ID', validators=[DataRequired()])
+
+class TransactionItemForm(Form):
+    product = FormField(ProductForm)
+    quantity = IntegerField(
+        'Quantity',
+        validators=[DataRequired(), NumberRange(min=1, max=50)]
+    )
 
 class TransactionForm(FlaskForm):
     transaction_type = SelectField(
@@ -21,8 +32,9 @@ class TransactionForm(FlaskForm):
     )
     customer = StringField('Customer Email', validators=[Optional(), Length(max=100)])
     employee = StringField('Employee Email', validators=[Optional(), Length(max=100)])
+
     payment_method = SelectField(
-        'Type',
+        'Payment Method',
         choices=[
             ('credit', 'credit'),
             ('debit', 'debit'),
@@ -30,12 +42,7 @@ class TransactionForm(FlaskForm):
         ],
         validators=[DataRequired()]
     )
+
+    items = FieldList(FormField(TransactionItemForm), min_entries=1)
+
     submit = SubmitField('Submit')
-
-class ProductForm(FlaskForm):
-    product_id = IntegerField('Product ID', validators=[DataRequired()])
-
-class TransactionItemForm(FlaskForm):
-    product = FormField(ProductForm)
-    quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=1, max=50)])
-
