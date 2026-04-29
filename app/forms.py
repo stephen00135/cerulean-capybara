@@ -20,7 +20,6 @@ class TransactionForm(FlaskForm):
         'Type',
         choices=[
             ('sale', 'sale'),
-            ('trade', 'trade'),
             ('return', 'return'),
         ],
         validators=[DataRequired()]

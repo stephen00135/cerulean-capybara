@@ -1,4 +1,5 @@
 import mysql.connector
+import json
 from flask import render_template, flash, redirect, request, url_for
 from app import app
 from app.database import (
@@ -22,7 +23,7 @@ from app.forms import (
 
 @app.route('/')
 @app.route('/index')
-@app.route('/employee', methods=['GET', 'POST'])
+@app.route('/transaction', methods=['GET', 'POST'])
 def employee():
     form = TransactionForm()
     if form.validate_on_submit():

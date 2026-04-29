@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS Employee (
 
 CREATE TABLE IF NOT EXISTS SalesTransaction (
     ID SERIAL,
-    Type ENUM('purchase', 'trade') NOT NULL,
+    Type ENUM('sale', 'return') NOT NULL,
     MemberID BIGINT UNSIGNED,
     EmployeeID BIGINT UNSIGNED NOT NULL,
     Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

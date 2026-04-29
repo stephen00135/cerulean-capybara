@@ -152,18 +152,6 @@ def get_db():
         )
     return g.db
 
-def init_db():
-    db = get_db()
-    cursor = db.cursor()
-    with current_app.open_resource('schema.sql') as file:
-        sql = file.read().decode('utf-8')
-    for statement in sql.split(';'):
-        if statement.strip():
-            cursor.execute(statement)
-
-    db.commit()
-    cursor.close()
-
 def close_db(e=None):
     db = g.pop('db', None)
     if db is not None:
