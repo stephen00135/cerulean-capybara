@@ -60,7 +60,7 @@ class AddProductForm(FlaskForm):
     )
     stock = IntegerField('Stock', validators=[DataRequired(), NumberRange(min=0)])
     brand = StringField('Brand', validators=[Optional(), Length(max=100)])
-    submit = SubmitField('Add Inventory')
+    submit = SubmitField('Add Products')
 
 class AddEmployeeForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=20)])
@@ -94,3 +94,11 @@ class UpdateEmployeeStatusForm(FlaskForm):
         validators=[DataRequired()]
     )
     submit = SubmitField('Update')
+
+class TerminateEmployeeForm(FlaskForm):
+    employee_id = HiddenField('Employee ID', validators=[DataRequired()])
+    submit = SubmitField('Terminate')
+
+class RemoveProductForm(FlaskForm):
+    product_id = HiddenField('Product ID', validators=[DataRequired()])
+    submit = SubmitField('Remove')

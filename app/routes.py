@@ -6,6 +6,8 @@ from app.forms import (
     TransactionForm,
     AddEmployeeForm,
     AddProductForm,
+    RemoveProductForm,
+    TerminateEmployeeForm,
     UpdateEmployeeStatusForm,
 )
 
@@ -42,7 +44,7 @@ def fetch_products():
         cursor.close()
         return products
     except mysql.connector.Error:
-        flash('Could not load inventory from the database.')
+        flash('Could not load products from the database.')
         return []
 
 def add_employee(form):
@@ -82,6 +84,20 @@ def update_employee_status(form):
     conn.commit()
     cursor.close()
 
+def terminate_employee(form):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        UPDATE employees
+        SET status = %s
+        WHERE id = %s
+        """,
+        ('terminated', form.employee_id.data),
+    )
+    conn.commit()
+    cursor.close()
+
 def add_product(form):
     conn = get_db()
     cursor = conn.cursor()
@@ -100,6 +116,19 @@ def add_product(form):
             form.stock.data,
             form.brand.data,
         ),
+    )
+    conn.commit()
+    cursor.close()
+
+def remove_product(form):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        DELETE FROM products
+        WHERE id = %s
+        """,
+        (form.product_id.data,),
     )
     conn.commit()
     cursor.close()
@@ -131,6 +160,7 @@ def employee():
 def manager():
     employee_form = AddEmployeeForm()
     status_form = UpdateEmployeeStatusForm()
+    terminate_form = TerminateEmployeeForm()
 
     if request.method == 'POST':
         form_name = request.form.get('form_name')
@@ -144,6 +174,11 @@ def manager():
                 update_employee_status(status_form)
                 flash('Employee status updated')
                 return redirect(url_for('manager'))
+
+            if form_name == 'terminate_employee' and terminate_form.validate_on_submit():
+                terminate_employee(terminate_form)
+                flash('Employee terminated')
+                return redirect(url_for('manager'))
         except mysql.connector.Error:
             flash('The database could not save your changes.')
 
@@ -152,25 +187,35 @@ def manager():
         title='Manager',
         employee_form=employee_form,
         status_form=status_form,
+        terminate_form=terminate_form,
         employees=fetch_employees(),
     )
 
 @app.route('/inventory', methods=['GET', 'POST'])
 def inventory():
     form = AddProductForm()
-    if form.validate_on_submit():
+    remove_form = RemoveProductForm()
+
+    if request.method == 'POST':
+        form_name = request.form.get('form_name')
         try:
-            add_product(form)
+            if form_name == 'add_product' and form.validate_on_submit():
+                add_product(form)
+                flash('Products added')
+                return redirect(url_for('inventory'))
+
+            if form_name == 'remove_product' and remove_form.validate_on_submit():
+                remove_product(remove_form)
+                flash('Product removed')
+                return redirect(url_for('inventory'))
         except mysql.connector.Error:
             flash('The database could not save your changes.')
             return redirect(url_for('inventory'))
 
-        flash('Product added')
-        return redirect(url_for('inventory'))
-
     return render_template(
-        'inventory.html',
-        title='Inventory',
+        'products.html',
+        title='Products',
         form=form,
+        remove_form=remove_form,
         products=fetch_products(),
     )

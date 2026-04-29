@@ -2,14 +2,15 @@
 
 {% block content %}
 <div class="container py-4">
-    <h1 class="mb-4">Inventory</h1>
+    <h1 class="mb-4">Products</h1>
 
     <form method="post">
         {{ form.hidden_tag() }}
+        <input type="hidden" name="form_name" value="add_product">
 
         <div class="card mb-4">
             <div class="card-header">
-                Add Inventory
+                Add Products
             </div>
             <div class="card-body">
                 <div class="row g-3">
@@ -71,7 +72,7 @@
 
     <div class="card">
         <div class="card-header">
-            Current Inventory
+            Current Products
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -84,6 +85,7 @@
                             <th>Condition</th>
                             <th>Price</th>
                             <th>Stock</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,10 +97,18 @@
                                 <td>{{ product.condition }}</td>
                                 <td>${{ product.price }}</td>
                                 <td>{{ product.stock }}</td>
+                                <td class="text-end">
+                                    <form method="post">
+                                        {{ remove_form.csrf_token }}
+                                        <input type="hidden" name="form_name" value="remove_product">
+                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
+                                    </form>
+                                </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="6" class="text-muted">No inventory found.</td>
+                                <td colspan="7" class="text-muted">No products found.</td>
                             </tr>
                         {% endfor %}
                     </tbody>

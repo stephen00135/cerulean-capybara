@@ -106,16 +106,25 @@
                                 <td>{% if employee.hourly_wage is not none %}${{ employee.hourly_wage }}{% endif %}</td>
                                 <td>{{ employee.status }}</td>
                                 <td>
-                                    <form method="post" class="d-flex gap-2 justify-content-end">
-                                        {{ status_form.csrf_token }}
-                                        <input type="hidden" name="form_name" value="update_employee_status">
-                                        <input type="hidden" name="employee_id" value="{{ employee.id }}">
-                                        <select class="form-select form-select-sm w-auto" name="status" aria-label="Employee status">
-                                            <option value="active" {% if employee.status == 'active' %}selected{% endif %}>active</option>
-                                            <option value="terminated" {% if employee.status == 'terminated' %}selected{% endif %}>terminated</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
-                                    </form>
+                                    <div class="d-flex gap-2 justify-content-end flex-wrap">
+                                        <form method="post" class="d-flex gap-2">
+                                            {{ status_form.csrf_token }}
+                                            <input type="hidden" name="form_name" value="update_employee_status">
+                                            <input type="hidden" name="employee_id" value="{{ employee.id }}">
+                                            <select class="form-select form-select-sm w-auto" name="status" aria-label="Employee status">
+                                                <option value="active" {% if employee.status == 'active' %}selected{% endif %}>active</option>
+                                                <option value="terminated" {% if employee.status == 'terminated' %}selected{% endif %}>terminated</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                                        </form>
+
+                                        <form method="post">
+                                            {{ terminate_form.csrf_token }}
+                                            <input type="hidden" name="form_name" value="terminate_employee">
+                                            <input type="hidden" name="employee_id" value="{{ employee.id }}">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Terminate</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         {% else %}
