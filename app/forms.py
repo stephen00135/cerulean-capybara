@@ -60,7 +60,7 @@ class AddProductForm(FlaskForm):
     )
     stock = IntegerField('Stock', validators=[DataRequired(), NumberRange(min=0)])
     brand = StringField('Brand', validators=[Optional(), Length(max=100)])
-    submit = SubmitField('Add Products')
+    submit = SubmitField('Add Product')
 
 class AddEmployeeForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=20)])

@@ -1,0 +1,5 @@
+1. Member doesn't implement status
+2. Transaction.Amount renamed to Transaction.Total
+3. Transaction.Status removed
+4. Columns reordered to put defaults last?
+5. GamePlatform and Platform not implemented

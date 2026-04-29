@@ -1,10 +1,65 @@
 CREATE DATABASE IF NOT EXISTS cerulean_capybara;
 USE cerulean_capybara;
 
-CREATE TABLE IF NOT EXISTS Employee (
+CREATE TABLE IF NOT EXISTS Member (
+    ID SERIAL,
+    FirstName VARCHAR(30) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Points INT UNSIGNED DEFAULT 0 NOT NULL
+    JoinDate NOT NULL DATE DEFAULT CURRENT_DATE,
+);
 
+CREATE TABLE IF NOT EXISTS Employee (
+    ID SERIAL,
+    FirstName VARCHAR(30) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+    Phone VARCHAR(15) NOT NULL UNIQUE,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Status ENUM('active', 'terminated') DEFAULT 'active' NOT NULL,
+    Title VARCHAR(50),
+    HourlyWage DECIMAL(6, 2),
+    Manager UNSINGED INT
+);
+
+CREATE TABLE IF NOT EXISTS Transaction (
+    ID SERIAL,
+    Type ENUM('purchase', 'trade') NOT NULL,
+    CustomerID INT UNSIGNED,
+    Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    TOTAL DECIMAL(10, 2) NOT NULL DEFAULT 0.0,
+    PayMethod ENUM('credit', 'cash', 'debit') NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS TransactionItem (
+    ID SERIAL,
+    TransactionID INT UNSIGNED NOT NULL,
+    ProductID INT UNSIGNED NOT NULL,
+    Quantity INT UNSIGNED NOT NULL,
+
+    FOREIGN KEY (TransactionID) REFERENCES Transaction(ID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ID)
 );
 
 CREATE TABLE IF NOT EXISTS Product (
+    ID SERIAL,
+    GameID INT UNSIGNED DEFAULT NULL,
+    ConesoleID INT UNSIGNED DEFAULT NULL,
+    SKU VARCHAR(50) NOT NULL UNIQUE,
+    Name VARCHAR(50) NOT NULL,
+    Price DECIMAL(10, 2),
+    Condition ENUM('new', 'used') NOT NULL DEFAULT 'new',
+    Stock INT UNSIGNED NOT NULL DEFAULT 0,
+    Brand VARCHAR(50),
+
+    FOREIGN KEY (GameID) REFERENCES Game(ID),
+    FOREIGN KEY (ConsoleID) REFERENCES CONSOLE(ID)
+);
+
+CREATE TABLE IF NOT EXISTS Game (
+    GAME
+);
+
+CREATE TABLE IF NOT EXISTS Console (
 
 );
