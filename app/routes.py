@@ -94,14 +94,14 @@ def manager():
 
 @app.route('/inventory', methods=['GET', 'POST'])
 def inventory():
-    form = AddProductForm()
+    product_form = AddProductForm()
     remove_form = RemoveProductForm()
 
     if request.method == 'POST':
         form_name = request.form.get('form_name')
         try:
-            if form_name == 'add_product' and form.validate_on_submit():
-                add_product(form)
+            if form_name == 'add_product' and product_form.validate_on_submit():
+                add_product(product_form)
                 flash('Products added')
                 return redirect(url_for('inventory'))
 
@@ -116,7 +116,7 @@ def inventory():
     return render_template(
         'products.html',
         title='Products',
-        form=form,
+        product_form=product_form,
         remove_form=remove_form,
         products=fetch_products(),
     )

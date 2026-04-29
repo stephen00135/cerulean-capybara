@@ -110,7 +110,7 @@
                                         <form method="post" class="d-flex gap-2">
                                             {{ status_form.csrf_token }}
                                             <input type="hidden" name="form_name" value="update_employee_status">
-                                            <input type="hidden" name="employee_id" value="{{ employee.EmployeeID }}">
+                                            <input type="hidden" name="employee_id" value="{{ employee.ID }}">
                                             <select class="form-select form-select-sm w-auto" name="status" aria-label="Employee status">
                                                 <option value="active" {% if employee.Status == 'active' %}selected{% endif %}>active</option>
                                                 <option value="terminated" {% if employee.Status == 'terminated' %}selected{% endif %}>terminated</option>
@@ -121,7 +121,7 @@
                                         <form method="post">
                                             {{ terminate_form.csrf_token }}
                                             <input type="hidden" name="form_name" value="terminate_employee">
-                                            <input type="hidden" name="employee_id" value="{{ employee.EmployeeID }}">
+                                            <input type="hidden" name="employee_id" value="{{ employee.ID }}">
                                             <button type="submit" class="btn btn-outline-danger btn-sm">Terminate</button>
                                         </form>
                                     </div>

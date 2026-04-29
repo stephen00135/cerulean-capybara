@@ -5,7 +5,7 @@
     <h1 class="mb-4">Products</h1>
 
     <form method="post">
-        {{ form.hidden_tag() }}
+        {{ product_form.hidden_tag() }}
         <input type="hidden" name="form_name" value="add_product">
 
         <div class="card mb-4">
@@ -15,56 +15,56 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        {{ form.sku.label(class="form-label") }}
-                        {{ form.sku(class="form-control") }}
-                        {% for error in form.sku.errors %}
+                        {{ product_form.sku.label(class="form-label") }}
+                        {{ product_form.sku(class="form-control") }}
+                        {% for error in product_form.sku.errors %}
                             <div class="text-danger small">{{ error }}</div>
                         {% endfor %}
                     </div>
 
                     <div class="col-md-8">
-                        {{ form.name.label(class="form-label") }}
-                        {{ form.name(class="form-control") }}
-                        {% for error in form.name.errors %}
+                        {{ product_form.name.label(class="form-label") }}
+                        {{ product_form.name(class="form-control") }}
+                        {% for error in product_form.name.errors %}
                             <div class="text-danger small">{{ error }}</div>
                         {% endfor %}
                     </div>
 
                     <div class="col-md-3">
-                        {{ form.price.label(class="form-label") }}
-                        {{ form.price(class="form-control", min="0", step="0.01") }}
-                        {% for error in form.price.errors %}
+                        {{ product_form.price.label(class="form-label") }}
+                        {{ product_form.price(class="form-control", min="0", step="0.01") }}
+                        {% for error in product_form.price.errors %}
                             <div class="text-danger small">{{ error }}</div>
                         {% endfor %}
                     </div>
 
                     <div class="col-md-3">
-                        {{ form.condition.label(class="form-label") }}
-                        {{ form.condition(class="form-select") }}
-                        {% for error in form.condition.errors %}
+                        {{ product_form.condition.label(class="form-label") }}
+                        {{ product_form.condition(class="form-select") }}
+                        {% for error in product_form.condition.errors %}
                             <div class="text-danger small">{{ error }}</div>
                         {% endfor %}
                     </div>
 
                     <div class="col-md-3">
-                        {{ form.stock.label(class="form-label") }}
-                        {{ form.stock(class="form-control", min="0") }}
-                        {% for error in form.stock.errors %}
+                        {{ product_form.stock.label(class="form-label") }}
+                        {{ product_form.stock(class="form-control", min="0") }}
+                        {% for error in product_form.stock.errors %}
                             <div class="text-danger small">{{ error }}</div>
                         {% endfor %}
                     </div>
 
                     <div class="col-md-3">
-                        {{ form.brand.label(class="form-label") }}
-                        {{ form.brand(class="form-control") }}
-                        {% for error in form.brand.errors %}
+                        {{ product_form.brand.label(class="form-label") }}
+                        {{ product_form.brand(class="form-control") }}
+                        {% for error in product_form.brand.errors %}
                             <div class="text-danger small">{{ error }}</div>
                         {% endfor %}
                     </div>
                 </div>
 
                 <div class="mt-4">
-                    {{ form.submit(class="btn btn-primary") }}
+                    {{ product_form.submit(class="btn btn-primary") }}
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@
                                     <form method="post">
                                         {{ remove_form.csrf_token }}
                                         <input type="hidden" name="form_name" value="remove_product">
-                                        <input type="hidden" name="product_id" value="{{ product.ProductID }}">
+                                        <input type="hidden" name="product_id" value="{{ product.ID }}">
                                         <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
                                     </form>
                                 </td>

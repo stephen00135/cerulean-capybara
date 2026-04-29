@@ -12,7 +12,7 @@ def fetch_employees():
         cursor.execute(
             """
             SELECT
-                EmployeeID,
+                ID,
                 FirstName,
                 LastName,
                 Phone,
@@ -20,15 +20,15 @@ def fetch_employees():
                 Status,
                 Title,
                 HourlyWage
-            FROM Employees
+            FROM Employee
             ORDER BY LastName, FirstName
             """
         )
         employees = cursor.fetchall()
         cursor.close()
         return employees
-    except mysql.connector.Error:
-        flash('Could not load employees from the database.')
+    except mysql.connector.Error as e:
+        flash(f'Could not load employees from the database: {e.msg}')
         return []
 
 def fetch_products():
@@ -38,22 +38,22 @@ def fetch_products():
         cursor.execute(
             """
             SELECT
-                ProductID,
+                ID,
                 SKU,
                 Name,
                 Price,
                 ProductCondition,
                 Stock,
                 Brand
-            FROM Products
+            FROM Product
             ORDER BY Name
             """
         )
         products = cursor.fetchall()
         cursor.close()
         return products
-    except mysql.connector.Error:
-        flash('Could not load products from the database.')
+    except mysql.connector.Error as e:
+        flash(f'Could not load products from the database: {e.msg}')
         return []
 
 def add_employee(form):
@@ -61,7 +61,7 @@ def add_employee(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        INSERT INTO Employees
+        INSERT INTO Employee
             (FirstName, LastName, Phone, Email, Status, Title, HourlyWage)
         VALUES
             (%s, %s, %s, %s, %s, %s, %s)
@@ -84,9 +84,9 @@ def update_employee_status(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        UPDATE Employees
+        UPDATE Employee
         SET Status = %s
-        WHERE EmployeeID = %s
+        WHERE ID = %s
         """,
         (form.status.data, form.employee_id.data),
     )
@@ -98,9 +98,9 @@ def terminate_employee(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        UPDATE Employees
+        UPDATE Employee
         SET Status = %s
-        WHERE EmployeeID = %s
+        WHERE ID = %s
         """,
         ('terminated', form.employee_id.data),
     )
@@ -112,7 +112,7 @@ def add_product(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        INSERT INTO Products
+        INSERT INTO Product
             (SKU, Name, Price, ProductCondition, Stock, Brand)
         VALUES
             (%s, %s, %s, %s, %s, %s)
@@ -134,8 +134,8 @@ def remove_product(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        DELETE FROM Products
-        WHERE ProductID = %s
+        DELETE FROM Product
+        WHERE ID = %s
         """,
         (form.product_id.data,),
     )

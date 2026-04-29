@@ -32,10 +32,11 @@ BEGIN
     INTO v_EmployeeID
     FROM Employee
     WHERE Employee.Email = p_EmployeeEmail
+      AND Employee.Status = 'active';
 
     IF v_EmployeeID IS NULL THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Employee not found';
+            SET MESSAGE_TEXT = 'Employee not found or inactive';
     END IF;
 
     INSERT INTO SalesTransaction
