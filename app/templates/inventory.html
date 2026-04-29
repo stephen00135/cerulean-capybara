@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Inventory</h1>
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Add Inventory
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        {{ form.sku.label(class="form-label") }}
+                        {{ form.sku(class="form-control") }}
+                        {% for error in form.sku.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-8">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-3">
+                        {{ form.price.label(class="form-label") }}
+                        {{ form.price(class="form-control", min="0", step="0.01") }}
+                        {% for error in form.price.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-3">
+                        {{ form.condition.label(class="form-label") }}
+                        {{ form.condition(class="form-select") }}
+                        {% for error in form.condition.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-3">
+                        {{ form.stock.label(class="form-label") }}
+                        {{ form.stock(class="form-control", min="0") }}
+                        {% for error in form.stock.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-3">
+                        {{ form.brand.label(class="form-label") }}
+                        {{ form.brand(class="form-control") }}
+                        {% for error in form.brand.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="card">
+        <div class="card-header">
+            Current Inventory
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Condition</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>{{ product.sku }}</td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.brand or '' }}</td>
+                                <td>{{ product.condition }}</td>
+                                <td>${{ product.price }}</td>
+                                <td>{{ product.stock }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-muted">No inventory found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

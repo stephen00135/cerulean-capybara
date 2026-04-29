@@ -1,5 +1,132 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Manager</h1>
 
+    <div class="card mb-4">
+        <div class="card-header">
+            Add Employee
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {{ employee_form.hidden_tag() }}
+                <input type="hidden" name="form_name" value="add_employee">
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        {{ employee_form.first_name.label(class="form-label") }}
+                        {{ employee_form.first_name(class="form-control") }}
+                        {% for error in employee_form.first_name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ employee_form.last_name.label(class="form-label") }}
+                        {{ employee_form.last_name(class="form-control") }}
+                        {% for error in employee_form.last_name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ employee_form.email.label(class="form-label") }}
+                        {{ employee_form.email(class="form-control", placeholder="employee@example.com") }}
+                        {% for error in employee_form.email.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ employee_form.phone.label(class="form-label") }}
+                        {{ employee_form.phone(class="form-control") }}
+                        {% for error in employee_form.phone.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ employee_form.status.label(class="form-label") }}
+                        {{ employee_form.status(class="form-select") }}
+                        {% for error in employee_form.status.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ employee_form.title.label(class="form-label") }}
+                        {{ employee_form.title(class="form-control") }}
+                        {% for error in employee_form.title.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ employee_form.hourly_wage.label(class="form-label") }}
+                        {{ employee_form.hourly_wage(class="form-control", min="0", step="0.01") }}
+                        {% for error in employee_form.hourly_wage.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    {{ employee_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            Employees
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Title</th>
+                            <th>Hourly Wage</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                            <tr>
+                                <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                                <td>{{ employee.email }}</td>
+                                <td>{{ employee.phone or '' }}</td>
+                                <td>{{ employee.title or '' }}</td>
+                                <td>{% if employee.hourly_wage is not none %}${{ employee.hourly_wage }}{% endif %}</td>
+                                <td>{{ employee.status }}</td>
+                                <td>
+                                    <form method="post" class="d-flex gap-2 justify-content-end">
+                                        {{ status_form.csrf_token }}
+                                        <input type="hidden" name="form_name" value="update_employee_status">
+                                        <input type="hidden" name="employee_id" value="{{ employee.id }}">
+                                        <select class="form-select form-select-sm w-auto" name="status" aria-label="Employee status">
+                                            <option value="active" {% if employee.status == 'active' %}selected{% endif %}>active</option>
+                                            <option value="terminated" {% if employee.status == 'terminated' %}selected{% endif %}>terminated</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-muted">No employees found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
