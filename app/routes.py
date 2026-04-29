@@ -27,21 +27,34 @@ from app.forms import (
 def employee():
     form = TransactionForm()
     if form.validate_on_submit():
-        conn = get_db()
-        cursor = conn.cursor()
-        transaction_type = form.transaction_type.data
-        customer = form.customer.data
-        employee = form.employee.data
-        payment_method = form.payment_method.data
-        items = []
-        for item in form.items:
-            items.append({
-                'product_id': item.product.product_id.data, # type: ignore
-                'quantity': item.quantity.data
-            })
-        cursor.close()
-        flash('Transaction submitted')
-        return redirect('/index')
+        try:
+            conn = get_db()
+            cursor = conn.cursor()
+            transaction_type = form.transaction_type.data
+            member_email = form.customer.data
+            employee_email = form.employee.data
+            payment_method = form.payment_method.data
+            items = []
+            for item in form.items:
+                items.append({
+                    'product_id': item.product.product_id.data, # type: ignore
+                    'quantity': item.quantity.data
+                })
+            cursor.callproc(
+                'CreateSalesTransaction',
+                [
+                    transaction_type,
+                    member_email,
+                    employee_email,
+                    payment_method,
+                    json.dumps(items)
+                ]
+            )
+            cursor.close()
+            flash('Transaction submitted')
+            return redirect('/index')
+        except mysql.connector.Error as e:
+            flash(f'Transaction could not be submitted: {e.msg}')
     return render_template('transaction.html', title='Transaction', form=form)
 
 @app.route('/manager', methods=['GET', 'POST'])

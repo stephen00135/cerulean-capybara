@@ -1,5 +1,7 @@
 DROP PROCEDURE IF EXISTS CreateSalesTransaction;
 
+DELIMITER //
+
 CREATE PROCEDURE CreateSalesTransaction (
     IN p_Type VARCHAR(20),
     IN p_MemberEmail VARCHAR(100),
@@ -59,6 +61,26 @@ BEGIN
     ) AS item
     JOIN Product ON Product.ID = item.ProductID;
 
+    UPDATE Product
+    JOIN JSON_TABLE(
+        p_Items,
+        '$[*]' COLUMNS (
+            ProductID BIGINT UNSIGNED PATH '$.product_id',
+            Quantity INT UNSIGNED PATH '$.quantity'
+        )
+    ) AS item ON Product.ID = item.ProductID
+    SET Product.Stock = Product.Stock - item.Quantity;
+
+    SELECT SUM(Total)
+    INTO v_Total
+    FROM TransactionItem
+    WHERE SalesTransactionID = v_TransactionID;
+
+    UPDATE SalesTransaction
+    SET Total = v_Total
+    WHERE ID = v_TransactionID;
 
     COMMIT;
-END
+END //
+
+DELIMITER ;
