@@ -11,9 +11,17 @@ def fetch_employees():
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            SELECT id, first_name, last_name, phone, email, status, title, hourly_wage
-            FROM employees
-            ORDER BY last_name, first_name
+            SELECT
+                EmployeeID,
+                FirstName,
+                LastName,
+                Phone,
+                Email,
+                Status,
+                Title,
+                HourlyWage
+            FROM Employees
+            ORDER BY LastName, FirstName
             """
         )
         employees = cursor.fetchall()
@@ -29,9 +37,16 @@ def fetch_products():
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            SELECT id, sku, name, price, `condition`, stock, brand
-            FROM products
-            ORDER BY name
+            SELECT
+                ProductID,
+                SKU,
+                Name,
+                Price,
+                ProductCondition,
+                Stock,
+                Brand
+            FROM Products
+            ORDER BY Name
             """
         )
         products = cursor.fetchall()
@@ -46,8 +61,8 @@ def add_employee(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        INSERT INTO employees
-            (first_name, last_name, phone, email, status, title, hourly_wage)
+        INSERT INTO Employees
+            (FirstName, LastName, Phone, Email, Status, Title, HourlyWage)
         VALUES
             (%s, %s, %s, %s, %s, %s, %s)
         """,
@@ -69,9 +84,9 @@ def update_employee_status(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        UPDATE employees
-        SET status = %s
-        WHERE id = %s
+        UPDATE Employees
+        SET Status = %s
+        WHERE EmployeeID = %s
         """,
         (form.status.data, form.employee_id.data),
     )
@@ -83,9 +98,9 @@ def terminate_employee(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        UPDATE employees
-        SET status = %s
-        WHERE id = %s
+        UPDATE Employees
+        SET Status = %s
+        WHERE EmployeeID = %s
         """,
         ('terminated', form.employee_id.data),
     )
@@ -97,8 +112,8 @@ def add_product(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        INSERT INTO products
-            (sku, name, price, `condition`, stock, brand)
+        INSERT INTO Products
+            (SKU, Name, Price, ProductCondition, Stock, Brand)
         VALUES
             (%s, %s, %s, %s, %s, %s)
         """,
@@ -119,8 +134,8 @@ def remove_product(form):
     cursor = conn.cursor()
     cursor.execute(
         """
-        DELETE FROM products
-        WHERE id = %s
+        DELETE FROM Products
+        WHERE ProductID = %s
         """,
         (form.product_id.data,),
     )

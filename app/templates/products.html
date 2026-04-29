@@ -91,17 +91,17 @@
                     <tbody>
                         {% for product in products %}
                             <tr>
-                                <td>{{ product.sku }}</td>
-                                <td>{{ product.name }}</td>
-                                <td>{{ product.brand or '' }}</td>
-                                <td>{{ product.condition }}</td>
-                                <td>${{ product.price }}</td>
-                                <td>{{ product.stock }}</td>
+                                <td>{{ product.SKU }}</td>
+                                <td>{{ product.Name }}</td>
+                                <td>{{ product.Brand or '' }}</td>
+                                <td>{{ product.ProductCondition }}</td>
+                                <td>${{ product.Price }}</td>
+                                <td>{{ product.Stock }}</td>
                                 <td class="text-end">
                                     <form method="post">
                                         {{ remove_form.csrf_token }}
                                         <input type="hidden" name="form_name" value="remove_product">
-                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                        <input type="hidden" name="product_id" value="{{ product.ProductID }}">
                                         <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
                                     </form>
                                 </td>
