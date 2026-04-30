@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, Optional, Length, NumberRange
 from wtforms.form import Form
 
 class ProductForm(Form):
-    product_id = IntegerField('Product ID', validators=[DataRequired()])
+    sku = StringField('SKU', validators=[DataRequired(), Length(max=50)])
 
 class TransactionItemForm(Form):
     product = FormField(ProductForm)

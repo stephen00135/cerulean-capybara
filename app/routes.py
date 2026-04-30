@@ -10,7 +10,8 @@ from app.database import (
     update_employee_status,
     terminate_employee,
     add_product,
-    remove_product
+    remove_product,
+    fetch_transactions
 )
 from app.forms import (
     TransactionForm,
@@ -37,7 +38,7 @@ def employee():
             items = []
             for item in form.items:
                 items.append({
-                    'product_id': item.product.product_id.data, # type: ignore
+                    'sku': item.product.sku.data, # type: ignore
                     'quantity': item.quantity.data
                 })
             cursor.callproc(
@@ -57,7 +58,15 @@ def employee():
             flash(f'Transaction could not be submitted: {e.msg}')
     return render_template('transaction.html', title='Transaction', form=form)
 
-@app.route('/manager', methods=['GET', 'POST'])
+@app.route('/transactions', methods=['GET', 'POST'])
+def transaction_history():
+    return render_template(
+        'transactions.html',
+        title='Transactions',
+        transactions=fetch_transactions()
+    )
+
+@app.route('/manager', methods=['GET'])
 def manager():
     employee_form = AddEmployeeForm()
     status_form = UpdateEmployeeStatusForm()

@@ -142,6 +142,35 @@ def remove_product(form):
     conn.commit()
     cursor.close()
 
+def fetch_transactions():
+    try:
+        conn = get_db()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT
+                SalesTransaction.ID,
+                SalesTransaction.Type,
+                Member.Email AS MemberEmail,
+                Employee.Email AS EmployeeEmail,
+                SalesTransaction.Date,
+                SalesTransaction.Total,
+                SalesTransaction.PayMethod
+            FROM SalesTransaction
+            LEFT JOIN Member
+            ON Member.ID = SalesTransaction.MemberID
+            JOIN Employee
+            ON Employee.ID = SalesTransaction.EmployeeID
+            ORDER BY SalesTransaction.Date DESC
+            """
+        )
+        transactions = cursor.fetchall()
+        cursor.close()
+        return transactions
+    except mysql.connector.Error as e:
+        flash(f'Could not load transactions from the database: {e.msg}')
+        return []
+
 def get_db():
     if 'db' not in g:
         g.db =  mysql.connector.connect(

@@ -50,26 +50,26 @@ BEGIN
         (SalesTransactionID, ProductID, Quantity, Total)
     SELECT
         v_TransactionID,
-        item.ProductID,
+        Product.ID,
         item.Quantity,
         item.Quantity * Product.Price
     FROM JSON_TABLE(
         p_Items,
         '$[*]' COLUMNS (
-            ProductID BIGINT UNSIGNED PATH '$.product_id',
+            SKU VARCHAR(50) PATH '$.sku',
             Quantity INT UNSIGNED PATH '$.quantity'
         )
     ) AS item
-    JOIN Product ON Product.ID = item.ProductID;
+    JOIN Product ON Product.SKU = item.SKU;
 
     UPDATE Product
     JOIN JSON_TABLE(
         p_Items,
         '$[*]' COLUMNS (
-            ProductID BIGINT UNSIGNED PATH '$.product_id',
+            SKU VARCHAR(50) PATH '$.sku',
             Quantity INT UNSIGNED PATH '$.quantity'
         )
-    ) AS item ON Product.ID = item.ProductID
+    ) AS item ON Product.SKU = item.SKU
     SET Product.Stock = Product.Stock - item.Quantity;
 
     SELECT SUM(Total)
@@ -82,6 +82,8 @@ BEGIN
     WHERE ID = v_TransactionID;
 
     COMMIT;
+
+    SELECT v_TransactionID as SalesTransactionID;
 END //
 
 DELIMITER ;

@@ -65,9 +65,9 @@
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            {{ item.product.product_id.label(class="form-label") }}
-                            {{ item.product.product_id(class="form-control") }}
-                            {% for error in item.product.product_id.errors %}
+                            {{ item.product.sku.label(class="form-label") }}
+                            {{ item.product.sku(class="form-control") }}
+                            {% for error in item.product.sku.errors %}
                                 <div class="text-danger small">{{ error }}</div>
                             {% endfor %}
                         </div>
@@ -106,12 +106,12 @@
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label" for="items-__index__-product-product_id">Product ID</label>
+                    <label class="form-label" for="items-__index__-product-sku">SKU</label>
                     <input
                         class="form-control"
-                        id="items-__index__-product-product_id"
-                        name="items-__index__-product-product_id"
-                        type="number"
+                        id="items-__index__-product-sku"
+                        name="items-__index__-product-sku"
+                        type="text"
                     >
                 </div>
 
@@ -156,13 +156,13 @@
             row.dataset.index = i;
             row.querySelector("h3").textContent = `Item ${i + 1}`;
 
-            const productInput = row.querySelector('input[name*="product-product_id"]');
+            const productInput = row.querySelector('input[name*="product-sku"]');
             const quantityInput = row.querySelector('input[name*="quantity"]');
-            const productLabel = row.querySelector('label[for*="product-product_id"]');
+            const productLabel = row.querySelector('label[for*="product-sku"]');
             const quantityLabel = row.querySelector('label[for*="quantity"]');
 
-            productInput.name = `items-${i}-product-product_id`;
-            productInput.id = `items-${i}-product-product_id`;
+            productInput.name = `items-${i}-product-sku`;
+            productInput.id = `items-${i}-product-sku`;
             productLabel.setAttribute("for", productInput.id);
 
             quantityInput.name = `items-${i}-quantity`;

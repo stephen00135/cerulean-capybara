@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Transactions</h1>
+
+    <div class="card">
+        <div class="card-header">
+            Transaction History
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Member</th>
+                            <th>Employee</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.ID }}</td>
+                                <td>{{ transaction.Type }}</td>
+                                <td>{{ transaction.MemberEmail or '' }}</td>
+                                <td>{{ transaction.EmployeeEmail }}</td>
+                                <td>{{ transaction.Date }}</td>
+                                <td>${{ transaction.Total }}</td>
+                                <td>{{ transaction.PayMethod }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-muted">No transactions found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
