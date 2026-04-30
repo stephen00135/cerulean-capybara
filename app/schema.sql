@@ -29,9 +29,11 @@ CREATE TABLE IF NOT EXISTS Member (
     ID SERIAL,
     FirstName VARCHAR(30) NOT NULL,
     LastName VARCHAR(30) NOT NULL,
-    Email VARCHAR(100) NOT NULL UNIQUE,
+    Email VARCHAR(100) NOT NULL,
     Points INT UNSIGNED DEFAULT 0 NOT NULL,
     JoinDate DATE NOT NULL DEFAULT (CURRENT_DATE)
+
+    UNIQUE INDEX index_member_email (Email)
 );
 
 CREATE TABLE IF NOT EXISTS Employee (
@@ -39,13 +41,14 @@ CREATE TABLE IF NOT EXISTS Employee (
     FirstName VARCHAR(30) NOT NULL,
     LastName VARCHAR(30) NOT NULL,
     Phone VARCHAR(15) NOT NULL UNIQUE,
-    Email VARCHAR(100) NOT NULL UNIQUE,
+    Email VARCHAR(100) NOT NULL,
     Status ENUM('active', 'terminated') DEFAULT 'active' NOT NULL,
     Title VARCHAR(50),
     HourlyWage DECIMAL(6, 2),
     ManagerID BIGINT UNSIGNED,
 
     FOREIGN KEY (ManagerID) REFERENCES Employee(ID)
+    UNIQUE INDEX index_eployee_email (Email)
 );
 
 CREATE TABLE IF NOT EXISTS SalesTransaction (
@@ -57,6 +60,7 @@ CREATE TABLE IF NOT EXISTS SalesTransaction (
     Total DECIMAL(10, 2) NOT NULL DEFAULT 0.0,
     PayMethod ENUM('credit', 'cash', 'debit') NOT NULL,
 
+    INDEX index_sales_transaction_date (Date)
     FOREIGN KEY (MemberID) REFERENCES Member(ID),
     FOREIGN KEY (EmployeeID) REFERENCES Employee(ID)
 );
