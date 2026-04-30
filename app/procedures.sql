@@ -70,7 +70,11 @@ BEGIN
             Quantity INT UNSIGNED PATH '$.quantity'
         )
     ) AS item ON Product.SKU = item.SKU
-    SET Product.Stock = Product.Stock - item.Quantity;
+    SET Product.Stock = CASE
+        WHEN p_Type = 'sale' THEN Product.Stock - item.Quantity
+        WHEN p_Type IN ('return', 'trade') THEN Product.Stock + item.Quantity
+        ELSE Product.Stock
+    END;
 
     SELECT SUM(Total)
     INTO v_Total
@@ -80,6 +84,12 @@ BEGIN
     UPDATE SalesTransaction
     SET Total = v_Total
     WHERE ID = v_TransactionID;
+
+    IF p_Type = 'sale' AND v_MemberID IS NOT NULL THEN
+        UPDATE Member
+        SET Points = Points + FLOOR(v_Total*10)
+        WHERE ID = v_MemberID;
+    END IF;
 
     COMMIT;
 

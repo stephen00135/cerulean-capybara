@@ -20,12 +20,13 @@ class TransactionForm(FlaskForm):
         'Type',
         choices=[
             ('sale', 'sale'),
+            ('trade', 'trade'),
             ('return', 'return'),
         ],
         validators=[DataRequired()]
     )
     customer = StringField('Customer Email', validators=[Optional(), Length(max=100)])
-    employee = StringField('Employee Email', validators=[Optional(), Length(max=100)])
+    employee = StringField('Employee Email', validators=[DataRequired(), Length(max=100)])
 
     payment_method = SelectField(
         'Payment Method',
@@ -43,7 +44,7 @@ class TransactionForm(FlaskForm):
 
 class AddProductForm(FlaskForm):
     sku = StringField('SKU', validators=[DataRequired(), Length(max=50)])
-    name = StringField('Product Name', validators=[DataRequired(), Length(max=100)])
+    name = StringField('Product Name', validators=[DataRequired(), Length(max=50)])
     price = DecimalField(
         'Price',
         validators=[DataRequired(), NumberRange(min=0)],
@@ -64,7 +65,7 @@ class AddProductForm(FlaskForm):
 class AddEmployeeForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=20)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(max=20)])
-    phone = StringField('Phone', validators=[Optional(), Length(max=20)])
+    phone = StringField('Phone', validators=[DataRequired(), Length(max=15)])
     email = StringField('Email', validators=[DataRequired(), Length(max=100)])
     status = SelectField(
         'Status',

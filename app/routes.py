@@ -66,7 +66,7 @@ def transaction_history():
         transactions=fetch_transactions()
     )
 
-@app.route('/manager', methods=['GET'])
+@app.route('/manager', methods=['GET', 'POST'])
 def manager():
     employee_form = AddEmployeeForm()
     status_form = UpdateEmployeeStatusForm()

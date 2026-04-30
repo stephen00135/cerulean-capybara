@@ -1,6 +1,7 @@
 Web app for displaying video game store sql database
 
 Usage:
+0. Install python dependencies 'pip install -r requirements.txt'
 1. Set up sql database and edit .env to relect database parameters
 2. run from terminal (on windows use backslash instead of /):
         mysql -u root -p < app/schema.sql
