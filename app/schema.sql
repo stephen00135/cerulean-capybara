@@ -4,9 +4,9 @@ USE cerulean_capybara;
 CREATE TABLE IF NOT EXISTS Game (
     ID SERIAL,
     Title VARCHAR(50) NOT NULL,
-    Platform VARCHAR(30) NOT NULL,
+    Platform VARCHAR(50) NOT NULL,
     ReleaseYear YEAR NOT NULL,
-    Genre VARCHAR(30),
+    Genre VARCHAR(50),
     Publisher VARCHAR(50),
     Developer VARCHAR(50),
     Rating ENUM('E', 'E10+', 'T', 'M', 'AO', 'RP'),
@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS Game (
 
 CREATE TABLE IF NOT EXISTS Console (
     ID SERIAL,
-    Name VARCHAR(30) NOT NULL,
+    Name VARCHAR(50) NOT NULL,
     Model VARCHAR(50) NOT NULL,
-    Platform VARCHAR(30) NOT NULL,
+    Platform VARCHAR(50) NOT NULL,
     ReleaseYear YEAR,
     DiscontinueYear YEAR,
 
