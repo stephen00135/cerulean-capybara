@@ -6,6 +6,8 @@ from app.database import (
     get_db,
     fetch_employees,
     fetch_products,
+    fetch_transactions,
+    fetch_transaction_items,
     add_employee,
     update_employee_status,
     terminate_employee,
@@ -120,3 +122,10 @@ def inventory():
         remove_form=remove_form,
         products=fetch_products(),
     )
+    
+@app.route('/history')
+def history():
+    transactions = fetch_transactions()
+    for transaction in transactions:
+        transaction['items'] = fetch_transaction_items(transaction['ID'])
+    return render_template('history.html', transactions=transactions)

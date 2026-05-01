@@ -55,6 +55,61 @@ def fetch_products():
     except mysql.connector.Error as e:
         flash(f'Could not load products from the database: {e.msg}')
         return []
+    
+def fetch_transactions():
+    try:
+        conn = get_db()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT
+                st.ID,
+                st.Type,
+                m.FirstName,
+                m.LastName,
+                e.FirstName as EmployeeFirstName,
+                e.LastName as EmployeeLastName,
+                st.Date,
+                st.Total,
+                st.PayMethod
+            FROM SalesTransaction st
+            LEFT JOIN Member m ON st.MemberID = m.ID
+            LEFT JOIN Employee e ON st.EmployeeID = e.ID
+            ORDER BY st.Date DESC
+            LIMIT 50
+            """
+        )
+        transactions = cursor.fetchall()
+        cursor.close()
+        return transactions
+    except mysql.connector.Error as e:
+        flash(f'Could not load transactions from the database: {e.msg}')
+        return []
+    
+def fetch_transaction_items(transaction_id):
+    try:
+        conn = get_db()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT
+                ti.ID,
+                p.SKU,
+                p.Name,
+                ti.Quantity,
+                ti.Total
+            FROM TransactionItem ti
+            JOIN Product p ON ti.ProductID = p.ID
+            WHERE ti.SalesTransactionID = %s
+            """,
+            (transaction_id,)
+        )
+        items = cursor.fetchall()
+        cursor.close()
+        return items
+    except mysql.connector.Error as e:
+        flash(f'Could not load transaction items: {e.msg}')
+        return []    
 
 def add_employee(form):
     conn = get_db()

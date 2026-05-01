@@ -65,13 +65,13 @@
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            {{ item.product.product_id.label(class="form-label") }}
-                            {{ item.product.product_id(class="form-control") }}
-                            {% for error in item.product.product_id.errors %}
-                                <div class="text-danger small">{{ error }}</div>
-                            {% endfor %}
+                            <label class="form-label">SKU</label>
+                                {{ item.product.product_id(class="form-control") }}
+                                {% for error in item.product.product_id.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
                         </div>
-
+                        
                         <div class="col-md-6">
                             {{ item.quantity.label(class="form-label") }}
                             {{ item.quantity(class="form-control", min="1", max="50") }}

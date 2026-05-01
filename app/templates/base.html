@@ -16,6 +16,7 @@
       <a class="navbar-brand" href="/">Cerulean Capybara</a>
     <div class="ms-auto">
       <a class="btn mx-2 {% if title == 'Transaction' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{{ url_for('employee') }}">Transaction</a>
+      <a class="btn mx-2 {% if title == 'History' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{{ url_for('history') }}">History</a>
       <a class="btn mx-2 {% if title == 'Manager' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{{ url_for('manager') }}">Manager</a>
       <a class="btn mx-2 {% if title == 'Products' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{{ url_for('inventory') }}">Products</a>
     </div>

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Transaction History</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Member</th>
+            <th>Employee</th>
+            <th>Type</th>
+            <th>Total</th>
+            <th>Payment Method</th>
+            <th>SKU</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.Date }}</td>
+            <td>
+                {% if transaction.FirstName %}
+                    {{ transaction.FirstName }} {{ transaction.LastName }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td>{{ transaction.EmployeeFirstName }} {{ transaction.EmployeeLastName }}</td>
+            <td>{{ transaction.Type }}</td>
+            <td>${{ "%.2f"|format(transaction.Total) }}</td>
+            <td>{{ transaction.PayMethod }}</td>
+            <td>{{ transaction.ID }}</td>
+        </tr>
+        <tr>
+            <td colspan="7" class="ps-4">
+                <div class="small text-muted mb-2">Items</div>
+                {% if transaction['items'] %}
+                    <ul class="mb-0">
+                        {% for item in transaction['items'] %}
+                            <li>
+                                {{ item.Quantity }} x {{ item.Name }} (SKU {{ item.SKU }}) -
+                                ${{ "%.2f"|format(item.Total) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span class="text-muted">No items</span>
+                {% endif %}
+            </td>
+        </tr>
+{% endfor %}
+    </tbody>
+</table>
+{% endblock %}
