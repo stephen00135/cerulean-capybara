@@ -95,10 +95,6 @@ class UpdateEmployeeStatusForm(FlaskForm):
     )
     submit = SubmitField('Update')
 
-class TerminateEmployeeForm(FlaskForm):
-    employee_id = HiddenField('Employee ID', validators=[DataRequired()])
-    submit = SubmitField('Terminate')
-
 class RemoveProductForm(FlaskForm):
     product_id = HiddenField('Product ID', validators=[DataRequired()])
     submit = SubmitField('Remove')

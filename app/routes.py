@@ -18,7 +18,6 @@ from app.forms import (
     AddEmployeeForm,
     AddProductForm,
     RemoveProductForm,
-    TerminateEmployeeForm,
     UpdateEmployeeStatusForm,
 )
 
@@ -70,7 +69,6 @@ def transaction_history():
 def manager():
     employee_form = AddEmployeeForm()
     status_form = UpdateEmployeeStatusForm()
-    terminate_form = TerminateEmployeeForm()
 
     if request.method == 'POST':
         form_name = request.form.get('form_name')
@@ -85,10 +83,6 @@ def manager():
                 flash('Employee status updated')
                 return redirect(url_for('manager'))
 
-            if form_name == 'terminate_employee' and terminate_form.validate_on_submit():
-                terminate_employee(terminate_form)
-                flash('Employee terminated')
-                return redirect(url_for('manager'))
         except mysql.connector.Error:
             flash('The database could not save your changes.')
 
@@ -97,7 +91,6 @@ def manager():
         title='Manager',
         employee_form=employee_form,
         status_form=status_form,
-        terminate_form=terminate_form,
         employees=fetch_employees(),
     )
 
