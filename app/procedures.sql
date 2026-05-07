@@ -23,6 +23,9 @@ BEGIN
 
     START TRANSACTION;
 
+    /*
+    Find IDs from email
+    */
     SELECT ID
     INTO v_MemberID
     FROM Member
@@ -34,11 +37,17 @@ BEGIN
     WHERE Employee.Email = p_EmployeeEmail
       AND Employee.Status = 'active';
 
+    /*
+    Check if employee exists and is active
+    */
     IF v_EmployeeID IS NULL THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Employee not found or inactive';
     END IF;
 
+    /*
+    Insert transaction
+    */
     INSERT INTO SalesTransaction
         (Type, MemberID, EmployeeID, PayMethod)
     VALUES
@@ -46,6 +55,9 @@ BEGIN
 
     SET v_TransactionID = LAST_INSERT_ID();
 
+    /*
+    Insert line items
+    */
     INSERT INTO TransactionItem
         (SalesTransactionID, ProductID, Quantity, Total)
     SELECT
@@ -62,6 +74,9 @@ BEGIN
     ) AS item
     JOIN Product ON Product.SKU = item.SKU;
 
+    /*
+    Update quantity from sku
+    */
     UPDATE Product
     JOIN JSON_TABLE(
         p_Items,
@@ -76,6 +91,9 @@ BEGIN
         ELSE Product.Stock
     END;
 
+    /*
+    Record transaction total
+    */
     SELECT SUM(Total)
     INTO v_Total
     FROM TransactionItem
@@ -85,6 +103,9 @@ BEGIN
     SET Total = v_Total
     WHERE ID = v_TransactionID;
 
+    /*
+    Add points if member sale
+    */
     IF p_Type = 'sale' AND v_MemberID IS NOT NULL THEN
         UPDATE Member
         SET Points = Points + FLOOR(v_Total*10)
